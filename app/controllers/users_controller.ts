@@ -8,7 +8,9 @@ export default class UsersController {
 
   async create({ response, request, auth }: HttpContext) {
     await auth.authenticate()
+
     console.log(await request)
+
     const newUser = await request.only(['fullName', 'email', 'password', 'isAdmin'])
     try {
       const user = await User.create(newUser)
