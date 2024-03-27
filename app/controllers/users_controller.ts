@@ -18,7 +18,7 @@ export default class UsersController {
       const user = await User.create(newUser)
       return user.fullName, user.email
     } catch (err) {
-      response.status(404).send('Invalid information')
+      response.status(400).send('Invalid information')
     }
   }
 
