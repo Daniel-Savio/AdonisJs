@@ -1,3 +1,4 @@
+import { createUser } from '#abilities/main'
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -6,11 +7,12 @@ export default class UsersController {
    *Controller for creating a user
    */
 
-  async create({ response, request, auth }: HttpContext) {
+  async create({ response, request, auth, bouncer }: HttpContext) {
     await auth.authenticate()
 
-    console.log(await request)
-
+    if (await bouncer.denies(createUser)) {
+      return response.forbidden('You are not an administrator')
+    }
     const newUser = await request.only(['fullName', 'email', 'password', 'isAdmin'])
     try {
       const user = await User.create(newUser)
